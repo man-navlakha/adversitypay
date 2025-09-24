@@ -1,23 +1,18 @@
-const express = require("express");
-const router = express.Router();
 const supabase = require("./supabase");
-const verifyUser = require("../middleware/verifyUser");
 
-// Get publisher stats
-router.get("/stats", verifyUser, async (req, res) => {
-  if (req.user.role !== "publisher") return res.status(403).json({ error: "Forbidden" });
+module.exports = async (req, res) => {
+  if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
+
+  const pub_id = req.query.pub_id;
+  if (!pub_id) return res.status(400).json({ error: "Publisher ID is required" });
 
   try {
-    const { data: earnings } = await supabase
-      .from("earnings")
-      .select("*")
-      .eq("publisher_id", req.user.id)
-      .single();
+    const { data: stats, error } = await supabase.from("earnings").select("*").eq("publisher_id", pub_id).single();
+    if (error) throw error;
 
-    res.json(earnings || { impressions: 0, clicks: 0, revenue: 0 });
+    res.json(stats || { impressions: 0, clicks: 0, revenue: 0 });
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch stats" });
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
-});
-
-module.exports = router;
+};
