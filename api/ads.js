@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const supabase = require("../supabase");
+const supabase = require("./supabas");
 const verifyUser = require("../middleware/verifyUser");
 
 // Advertiser creates ad

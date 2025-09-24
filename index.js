@@ -6,8 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/ads", require("./routes/ads"));
-app.use("/api/publisher", require("./routes/publisher"));
+app.use("/api/ads", require("./api/ads"));
+app.use("/api/publisher", require("./api/publisher"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
