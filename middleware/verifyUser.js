@@ -1,4 +1,4 @@
-const supabase = require("../supabase");
+const supabase = require("../api/supabas");
 
 async function verifyUser(req, res, next) {
   const authHeader = req.headers.authorization;
